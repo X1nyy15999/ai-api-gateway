@@ -110,9 +110,11 @@ def list_models():
     return jsonify({
         'object': 'list',
         'data': [
+            {'id': 'gpt-4o', 'object': 'model'},
+            {'id': 'gpt-4o-mini', 'object': 'model'},
             {'id': 'gpt-4', 'object': 'model'},
-            {'id': 'gpt-4-browsing', 'object': 'model'},
-            {'id': 'gpt-3.5', 'object': 'model'},
+            {'id': 'gpt-4-turbo', 'object': 'model'},
+            {'id': 'gpt-3.5-turbo', 'object': 'model'},
         ]
     })
 
