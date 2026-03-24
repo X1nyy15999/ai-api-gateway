@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  # ChatGPT API 服务
+  chatgpt-api:
+    build:
+      context: ./chatgpt
+      dockerfile: Dockerfile
+    container_name: chatgpt-api
+    ports:
+      - "${CHATGPT_PORT:-3040}:8000"
+    environment:
+      - CHATGPT_ACCESS_TOKEN=${CHATGPT_ACCESS_TOKEN}
+      - CHATGPT_EMAIL=${CHATGPT_EMAIL}
+      - CHATGPT_PASSWORD=${CHATGPT_PASSWORD}
+      - CHATGPT_MODEL=${CHATGPT_MODEL:-gpt-4}
+    volumes:
+      - ./chatgpt/config:/config
+    restart: unless-stopped
+    networks:
+      - ai-api-network
+
+  # Claude API 服务
+  claude-api:
+    image: ghcr.io/yushangxiao/claude2api:latest
+    container_name: claude-api
+    ports:
+      - "${CLAUDE_PORT:-8080}:8080"
+    environment:
+      - SESSIONS=${CLAUDE_SESSION_KEY}
+      - APIKEY=${CLAUDE_API_KEY}
+      - CHAT_DELETE=${CLAUDE_CHAT_DELETE:-true}
+      - MAX_CHAT_HISTORY_LENGTH=${CLAUDE_MAX_HISTORY:-10000}
+    restart: unless-stopped
+    networks:
+      - ai-api-network
+
+networks:
+  ai-api-network:
+    driver: bridge
